@@ -70,7 +70,14 @@ RUN uv --version
 WORKDIR /app
 # Install only production deps
 RUN npm ci --omit=dev
+
 RUN npm install @e2b/mcp-server mcp-remote firecrawl-mcp @upstash/context7-mcp @brave/brave-search-mcp-server server-perplexity-ask
+
+COPY custom_mcp/perplexity-ask ./custom_mcp/perplexity-ask
+WORKDIR /app/custom_mcp/perplexity-ask
+RUN npm install
+WORKDIR /app
+
 COPY api ./api
 COPY config ./config
 COPY --from=data-provider-build /app/packages/data-provider/dist ./packages/data-provider/dist
